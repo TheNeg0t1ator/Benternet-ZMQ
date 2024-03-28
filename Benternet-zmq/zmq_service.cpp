@@ -14,31 +14,39 @@
 ZMQ_service::ZMQ_service(const std::string& sendAddress, const std::string& receiveAddress) {
     MQ_push_socket.connect(sendAddress);
     MQ_pull_socket.connect(receiveAddress); // Connect the pull socket to the same address as the push socket
+    MQ_sub_socket.connect(receiveAddress); // Connect the sub socket to the same address as the push socket
 }
 
 void ZMQ_service::send(const char* message) {
     int length = strlen(message);
+    std::cout << "Sending : [" << message << "] of length: " << length << std::endl;
     MQ_push_socket.send(message, length);
     std::cout << "Pushed : [" << message << "]" << std::endl;
 }
 
 
 std::string ZMQ_service::receive(int timeoutMs) {
-        zmq::message_t message;
-        MQ_pull_socket.setsockopt(ZMQ_RCVTIMEO, &timeoutMs, sizeof(timeoutMs));
-        try {
-            MQ_pull_socket.recv(&message);
-            std::string receivedMessage(static_cast<char*>(message.data()), message.size());
-            std::cout << "Received : [" << receivedMessage << "]" << std::endl;
-            return receivedMessage;
-        } catch (zmq::error_t& ex) {
-            if (ex.num() == EAGAIN) {
-                std::cout << "Receive timeout" << std::endl;
-            } else {
-                throw ex;
-            }
+    zmq::socket_t& socket = IsSubscribed ? MQ_sub_socket : MQ_pull_socket;
+    zmq::message_t message;
+    socket.setsockopt(ZMQ_RCVTIMEO, &timeoutMs, sizeof(timeoutMs));
+    try {
+        socket.recv(&message);
+        std::string receivedMessage(static_cast<char*>(message.data()), message.size());
+        std::cout << "Received : [" << receivedMessage << "]" << std::endl;
+        return receivedMessage;
+    } catch (zmq::error_t& ex) {
+        if (ex.num() == EAGAIN) {
+            std::cout << "Receive timeout" << std::endl;
+        } else {
+            throw ex;
         }
-        return "";
+    }
+    return "";
+}
+
+void ZMQ_service::Subscribe(char* topic) {
+    MQ_sub_socket.setsockopt(ZMQ_SUBSCRIBE, topic, 6);
+    IsSubscribed = true;
 }
 
 bool ZMQ_service::connected() {

@@ -12,15 +12,20 @@ int main( void )
 {
     try
     {
-        ZMQ_service service("tcp://benternet.pxl-ea-ict.be:24041","tcp://localhost:24041" );
-        // ventilator.connect( "tcp://192.168.1.8:24041" );
-        // ventilator.connect( "tcp://localhost:24041" );
-        // ventilator.connect( "tcp://benternet.pxl-ea-ict.be:24041" );
-        char * messagetosend = "example>quest?>barrie>";
+        ZMQ_service service("tcp://benternet.pxl-ea-ict.be:24041","tcp://benternet.pxl-ea-ict.be:24042" );
+        //"tcp://192.168.1.8:24041"
+        //"tcp://localhost:24041"
+        //"tcp://benternet.pxl-ea-ict.be:24041"
+        char * messagetosend = "prime?";
+        if( service.connected() )
+        {
+            service.send(messagetosend);
+            service.Subscribe("prime");
+        }
+
         while( service.connected() )
         {
-            sleep( 1000 );
-            service.send(messagetosend);
+            sleep( 10 );
             service.receive(1000); // Receive a message
         }
     }
