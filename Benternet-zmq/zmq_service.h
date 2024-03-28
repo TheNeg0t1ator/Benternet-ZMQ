@@ -23,7 +23,7 @@ public:
                 ZMQ_service (const std::string& sendAddress, const std::string& receiveAddress);
     void        send        (const char* message);
     std::string receive     (int timeoutMs);
-    void        Subscribe   (char* topic);
+    void        Subscribe   (std::string topic);
     bool        connected   ();
 
 };

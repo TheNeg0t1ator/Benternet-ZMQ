@@ -44,8 +44,8 @@ std::string ZMQ_service::receive(int timeoutMs) {
     return "";
 }
 
-void ZMQ_service::Subscribe(char* topic) {
-    MQ_sub_socket.setsockopt(ZMQ_SUBSCRIBE, topic, 6);
+void ZMQ_service::Subscribe(std::string topic) {
+    MQ_sub_socket.setsockopt(ZMQ_SUBSCRIBE, &topic, 0);
     IsSubscribed = true;
 }
 

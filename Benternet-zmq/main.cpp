@@ -25,7 +25,8 @@ int main( void )
 
         while( service.connected() )
         {
-            sleep( 10 );
+            sleep( 1000 );
+            service.send(messagetosend);
             service.receive(1000); // Receive a message
         }
     }

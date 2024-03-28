@@ -3,8 +3,9 @@
 FileClass::FileClass() {}
 
 bool FileClass::openFile(){
-    file = fopen("primes.txt", "r");
+    file = fopen("C:\\Users\\kobed\\Coding\\Cuda-prime-GIT\\output.txt", "r");
     if (file == NULL){
+        perror("Error opening file");
         return false;
     }else{
         return true;

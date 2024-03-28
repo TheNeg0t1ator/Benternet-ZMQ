@@ -11,11 +11,18 @@
 
 int main( void )
 {
+    std::vector<int> primes;
     FileClass file;
-    file.openFile();
-    file.readFile();
-    std::vector<int> primes = file.outputprimes();
-    file.closeFile();
+    if (file.openFile())
+    {
+        file.readFile();
+        primes = file.outputprimes();
+        file.closeFile();
+    }
+    else
+    {
+        std::cout << "File not found." << std::endl;
+    }
     try
     {
         ZMQ_service service("tcp://benternet.pxl-ea-ict.be:24041","tcp://benternet.pxl-ea-ict.be:24042" );
@@ -33,46 +40,48 @@ int main( void )
         while( service.connected() )
         {
             sleep( 10 );
-            std::cout << "while";
+            std::cout << "while ";
             messageReceived = service.receive(1000); // Receive a message
             sleep(1000);
-            std::cout << "while2";
-            for (int i = 0; i < 10/*primes.size()*/; i++)
+            std::cout << "while2 ";
+
+            if (strcmp(messageReceived.c_str(), "prime?") == 0)
+            {
+
+                sleep(100);
+                //std::cout << "sending primes...\n";
+                service.send("prime!>");
+                //std::cout << "debug";
+                for (int i = 0; i < 10/*primes.size()*/; i++)
                 {
-                    std::cout << "while";
                     std::cout << "i = " << i << " sending prime: " << primes[i] << std::endl;
-                    char * message = nullptr;
+                    char message[100]; // Allocate memory for the message
                     sprintf(message, "prime!>%d", primes[i]);
-                    std::cout << "test";
                     service.send(message);
-                    std::cout << "test2";
-                    sleep(100);
+                    sleep(1);
                 }
-            // if (strcmp(messageReceived.c_str(), "prime?") == 0)
-            // {
-            //     sleep(100);
-            //     std::cout << "sending primes...\n";
-            //     service.send("prime!>");
-            //     std::cout << "debug";
-            //     for (int i = 0; i < 10/*primes.size()*/; i++)
-            //     {
-            //         std::cout << "i = " << i << " sending prime: " << primes[i] << std::endl;
-            //         char * message = nullptr;
-            //         sprintf(message, "prime!>%d", primes[i]);
-            //         service.send(message);
-            //         sleep(100);
-            //     }
-            // }
-            // else
-            // {
-            //     std::cout << "waiting for message...\n";
-            //     //service.send("prime!>no");
-            // }
+            }
+            else
+            {
+                std::cout << "waiting for message...\n";
+                //service.send("prime!>no");
+            }
         }
     }
     catch( zmq::error_t & ex )
     {
-        std::cerr << "Caught an exception : " << ex.what();
+        std::cerr << "Caught an exception : " << ex.what() << std::endl;
+        return 1; // Exit the program with an error code
+    }
+    catch( std::exception & ex )
+    {
+        std::cerr << "Caught an exception : " << ex.what() << std::endl;
+        return 1; // Exit the program with an error code
+    }
+    catch( ... )
+    {
+        std::cerr << "Caught an unknown exception" << std::endl;
+        return 1; // Exit the program with an error code
     }
 
     return 0;
