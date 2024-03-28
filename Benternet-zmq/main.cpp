@@ -10,6 +10,7 @@
 
 int main( void )
 {
+    std::string messagereceived;
     try
     {
         ZMQ_service service("tcp://benternet.pxl-ea-ict.be:24041","tcp://benternet.pxl-ea-ict.be:24042" );
@@ -26,8 +27,11 @@ int main( void )
         while( service.connected() )
         {
             sleep( 1000 );
+            while (messagereceived.find("prime!") != std::string::npos){
+                service.receive(1000); // Receive a message
+            }
             service.send(messagetosend);
-            service.receive(1000); // Receive a message
+            
         }
     }
     catch( zmq::error_t & ex )
