@@ -2,17 +2,17 @@
 
 
 
-
+This is how the basics work 
 
 ```mermaid
 sequenceDiagram
-    participant PhotoGenic
+    participant Service
     participant User
 
     activate User
-    activate PhotoGenic
-    User-->>+PhotoGenic: Negotiator? (JSON with prompt and options)
-    PhotoGenic-->>+User: Negotiator! (Photo in base64 format)
+    activate Service
+    User-->>+Service: Negotiator? (JSON with prompt and options)
+    Service-->>+User: Negotiator! (Photo in base64 format)
 ```
 
 this works with the following flowchart
