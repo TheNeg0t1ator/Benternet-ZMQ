@@ -22,14 +22,32 @@ flowchart LR
     INPUT(User</br> input)
     JSON{Extract </br>JSON}
     OUTPUT(Output image </br>to zmq)
-    USER_OUTPUT(Convert base 64</br>to jpg)
+    USER_OUTPUT(user)
+    IMAGE(PhotoGenic)
+    NUMBER(NumberGenic)
+    PRIMES(Prime Numbers)
+    SIMPLES(Simple Numbers)
+    NUMBER_OUT(Output number </br>to ZMQ)
+
     INPUT-->JSON
+    JSON-->IMAGE
+    JSON-->NUMBER
+
+    NUMBER-->PRIMES & SIMPLES
+
+    PRIMES & SIMPLES --> NUMBER_OUT
+    NUMBER_OUT --> USER_OUTPUT
+    
+
     IMGUR(imgur api)
     OPENAI(openai</br>image api)
     SEPPE(Seppe's Image </br>editing api)
-    JSON--Search-->IMGUR
-    JSON--Generate-->OPENAI
-    JSON--Edit-->SEPPE
+
+    IMAGE--Search-->IMGUR
+    IMAGE--Generate-->OPENAI
+    IMAGE--Edit-->SEPPE
+
+
     IMGUR & OPENAI & SEPPE --Base 64 -->OUTPUT
     OUTPUT-->USER_OUTPUT
 ```
