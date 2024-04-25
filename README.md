@@ -11,8 +11,8 @@ sequenceDiagram
 
     activate User
     activate PhotoGenic
-    User-->>+PhotoGenic: PhotoGenic? (JSON with prompt and options)
-    PhotoGenic-->>+User: PhotoGenic! (Photo in base64 format)
+    User-->>+PhotoGenic: Negotiator? (JSON with prompt and options)
+    PhotoGenic-->>+User: Negotiator! (Photo in base64 format)
 ```
 
 this works with the following flowchart
@@ -34,3 +34,25 @@ flowchart LR
     OUTPUT-->USER_OUTPUT
 ```
 
+The Json has this structure
+
+```json
+{
+    "RequestType": "Image",
+    "ImageType": "Generate",
+    "Prompt": "A penguin in a suit",
+    "Resolution": "512x512",
+    "Spellcheck": "True"
+}
+```
+
+or you could ask for a prime number, simple number or other by changing the json
+
+```json
+{
+    "RequestType": "Number",
+    "NumberType": "Prime",
+    "CheckNumber": "false",// if checknumber is true, it checks if prompt is of number type
+    "Prompt": "5", // in this case it gives the fifth prime number
+}
+```
