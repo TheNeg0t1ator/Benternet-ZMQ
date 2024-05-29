@@ -1,0 +1,7 @@
+{
+    "RequestType": "Image",
+    "ImageType": "Generate",
+    "Prompt": "A penguin in a suit",
+    "Resolution": "512x512",
+    "Spellcheck": "True"
+}
