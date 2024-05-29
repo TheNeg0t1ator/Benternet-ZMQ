@@ -32,39 +32,28 @@ int main( void )
         std::string messageReceived;
         if( service.connected() )
         {
-            service.Subscribe("prime");
+            service.Subscribe("kobe?");
         }
         
-        std::cout << "test1";
-
+        
         while( service.connected() )
         {
-            sleep( 10 );
-            std::cout << "while ";
             messageReceived = service.receive(1000); // Receive a message
-            sleep(1000);
-            std::cout << "while2 ";
-
-            if (strcmp(messageReceived.c_str(), "prime?") == 0)
+            
+            if (strcmp(messageReceived.c_str(), "kobe?") == 0)
             {
 
                 sleep(100);
-                //std::cout << "sending primes...\n";
-                service.send("prime!>");
-                //std::cout << "debug";
-                for (int i = 0; i < 10/*primes.size()*/; i++)
-                {
-                    std::cout << "i = " << i << " sending prime: " << primes[i] << std::endl;
-                    char message[100]; // Allocate memory for the message
-                    sprintf(message, "prime!>%d", primes[i]);
-                    service.send(message);
-                    sleep(1);
-                }
+                std::string message = "kobe!>";
+
+                service.send(message.c_str());
+                
+                
             }
             else
             {
                 std::cout << "waiting for message...\n";
-                //service.send("prime!>no");
+                
             }
         }
     }
