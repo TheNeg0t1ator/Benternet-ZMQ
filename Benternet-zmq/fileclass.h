@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <vector>
+#include "cJSON.h"
 #ifndef FILECLASS_H
 #define FILECLASS_H
 
