@@ -32,7 +32,7 @@ std::string ZMQ_service::receive(int timeoutMs) {
     try {
         socket.recv(&message);
         std::string receivedMessage(static_cast<char*>(message.data()), message.size());
-        std::cout << "Received : [" << receivedMessage << "]" << std::endl;
+        //std::cout << "Received : [" << receivedMessage << "]" << std::endl;
         return receivedMessage;
     } catch (zmq::error_t& ex) {
         if (ex.num() == EAGAIN) {
@@ -46,9 +46,11 @@ std::string ZMQ_service::receive(int timeoutMs) {
 
 void ZMQ_service::Subscribe(std::string topic) {
     MQ_sub_socket.setsockopt(ZMQ_SUBSCRIBE, &topic, 0);
+    std::cout << "topic:" << topic << std::endl;
     IsSubscribed = true;
 }
 
 bool ZMQ_service::connected() {
-    return MQ_push_socket.connected() && MQ_pull_socket.connected();
+    std::cout << "test"<< std::endl;
+    return MQ_push_socket.connected() && MQ_pull_socket.connected() && MQ_sub_socket.connected();
 }

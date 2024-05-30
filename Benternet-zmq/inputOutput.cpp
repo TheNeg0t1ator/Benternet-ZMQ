@@ -6,8 +6,11 @@ inputOutput::inputOutput() {}
 
 void inputOutput::inputJSON(std::string input)
 {
+    std::cout << "entered inputJSON" << std::endl;
     inputData = input;
+    std::cout << "Input: " << input << std::endl;
     data = parseInput(input);
+    std::cout << "Data parsed" << std::endl;
 }
 
 inputData_t inputOutput::getInput(void)
@@ -26,19 +29,43 @@ void cleardata(void){
 
 
 inputData_t inputOutput::parseInput(std::string input){
+    std::cout << "entered parseInput" << std::endl;
     PrompData_t data;
     cJSON *root = cJSON_Parse(input.c_str());
     cJSON *prompt = cJSON_GetObjectItem(root, "Prompt");
     cJSON *resolution = cJSON_GetObjectItem(root, "resolution");
     cJSON *RequestType = cJSON_GetObjectItem(root, "RequestType");
     cJSON *numberType = cJSON_GetObjectItem(root, "numberType");
-    cJSON *x = cJSON_GetObjectItem(resolution, "x");
-    cJSON *y = cJSON_GetObjectItem(resolution, "y");
-    data.Prompt = prompt->valuestring;
-    data.resolution.x = x->valueint;
-    data.resolution.y = y->valueint;
-    data.RequestType = RequestType->valueint;
-    data.numberType = numberType->valueint;
+    std::string resolution_str;
+    
+    if (prompt != nullptr) {
+        data.Prompt = prompt->valuestring;
+    } else {
+        throw std::runtime_error("Error: Failed to parse input JSON. Missing \"Prompt\" field.");
+    }
+
+    if (resolution != nullptr) {
+        resolution_str = resolution->valuestring;
+    } else {
+        throw std::runtime_error("Error: Failed to parse input JSON. Missing \"resolution\" field.");
+    }
+
+    sscanf(resolution_str.c_str(), "%dx%d", &data.resolution.x, &data.resolution.y);
+
+
+    if (RequestType != nullptr) {
+        data.RequestType = RequestType->valueint;
+    } else {
+        throw std::runtime_error("Error: Failed to parse input JSON. Missing \"RequestType\" field.");
+    }
+
+    if (numberType != nullptr) {
+        data.numberType = numberType->valueint;
+    } else {
+        data.numberType = 0;
+        //throw std::runtime_error("Error: Failed to parse input JSON. Missing \"numberType\" field.");
+    }
+    std::cout << "parsed input" << std::endl;
     cJSON_Delete(root);
     inputData_t output;
     output.data = data;

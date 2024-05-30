@@ -36,7 +36,7 @@ typedef struct{
     uint8_t errorType;
 }outputData_t;
 
-class inputOutput
+class  inputOutput
 {
 public:
     inputOutput();

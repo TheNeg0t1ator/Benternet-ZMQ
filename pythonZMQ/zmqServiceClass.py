@@ -1,3 +1,5 @@
+import zmq
+
 class ZMQ_service:
     def __init__(self, pushaddress, subaddress):
         self.push_context = zmq.Context()
