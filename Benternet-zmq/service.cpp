@@ -1,3 +1,4 @@
+#include <bitset>
 #include <iostream>
 #include <zmq.hpp>
 #include "zmq_service.h"
@@ -46,14 +47,19 @@ int main( void )
         {
             std::cout << "while ";
             messageReceived = service.receive(1000); // Receive a message
-            sleep(1000);
+            sleep(100);
 
             if (messageReceived.find("kobe?") != std::string::npos)
             {
                 std::cout << "Received message: " << messageReceived << std::endl;
                 
                 //io_class.cleardata();
-                io_class.inputJSON(messageReceived.substr(5));
+                io_class.inputJSON(messageReceived);
+                if(io_class.getInput().errorType != io_NoError)
+                {
+                    std::cout << "Error in input data, error : " << std::bitset<8>(io_class.getInput().errorType) << std::endl;
+                    continue;
+                }else{
                 std::cout << "Data received: " << std::endl;
                 io_class.printData();
     
@@ -68,6 +74,7 @@ int main( void )
                 
                 std::string message = "kobe!>" + output;
                 service.send(message.c_str());
+                }
                 sleep(100);
             }
             else
