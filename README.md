@@ -74,3 +74,8 @@ or you could ask for a prime number, simple number or other by changing the json
     "Prompt": "5", // in this case it gives the fifth prime number
 }
 ```
+
+failsafes,
+
+als niet geldig altijd een respons sturen
+

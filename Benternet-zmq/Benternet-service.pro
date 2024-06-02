@@ -9,8 +9,12 @@ INCLUDEPATH += $$PWD/../include
 
 SOURCES += service.cpp \
     fileclass.cpp \
-    zmq_service.cpp
+    inputOutput.cpp \
+    zmq_service.cpp \
+    cJSON.c
 
 HEADERS += \
     fileclass.h \
-    zmq_service.h
+    inputOutput.h \
+    zmq_service.h \
+    cJSON.h
