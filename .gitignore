@@ -55,3 +55,4 @@ bin/
 build/
 .qmake.stash
 .qtc_clangd/
+pythonZMQ/__pycache__/jsontest.cpython-312.pyc
