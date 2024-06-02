@@ -1,20 +1,22 @@
-#include <cstdio>
-#include <vector>
-#include "cJSON.h"
 #ifndef FILECLASS_H
 #define FILECLASS_H
 
-class FileClass
-{
+#include <vector>
+#include <string>
+#include <cstdio>
+
+class FileClass {
 public:
     FileClass();
-    bool openFile();
+    bool openFile(std::string filename);
     void closeFile();
     bool readFile();
-    std::vector<int> outputprimes();
+    std::vector<std::string> outputNumbers();
+
 private:
-    FILE *file;
-    std::vector<int> primelist;
+    FILE* file;
+    std::string filename; // store the filename
+    std::vector<std::string> Numberlist;
 };
 
-#endif // FILECLASS_H
+#endif

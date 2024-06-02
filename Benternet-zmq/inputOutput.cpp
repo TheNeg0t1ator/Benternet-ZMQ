@@ -2,6 +2,7 @@
 #include "cJSON.h"
 #include <cstring>
 #include <iostream>
+#include <bitset>
 
 #define Use_RuntimeError
 
@@ -33,8 +34,8 @@ void cleardata(void)
 
 inputData_t inputOutput::parseInput(std::string input)
 {
-    std::cout << "entered parseInput" << std::endl;
-    std::cout << "Input: " << input << std::endl;
+    // std::cout << "entered parseInput" << std::endl;
+    // std::cout << "Input: " << input << std::endl;
     PrompData_t data;
     cJSON *root = cJSON_Parse(input.c_str());
     cJSON *prompt = cJSON_GetObjectItem(root, "Prompt");
@@ -69,6 +70,12 @@ inputData_t inputOutput::parseInput(std::string input)
         else if (strcmp(requeststring.c_str(), "Number") == 0)
         {
             data.RequestType = Request_number;
+
+            
+
+        }else{
+            data.RequestType = 0;
+            throw std::runtime_error("Error: Failed to parse input JSON. Invalid \"RequestType\" field.");
         }
     }
     else
@@ -106,7 +113,20 @@ inputData_t inputOutput::parseInput(std::string input)
     {
         if (numberType != nullptr)
         {
-            data.numberType = numberType->valueint;
+            std::string NumbertypeString = numberType->valuestring;
+            std::cout << "parse input NumberType: " << NumbertypeString << std::endl;
+            if (strcmp(NumbertypeString.c_str(), "Prime") == 0){
+                data.numberType = Number_Type_Prime;
+            }else if (strcmp(NumbertypeString.c_str(), "Simple") == 0){
+                data.numberType = Number_Type_Simple;
+            }else if (strcmp(NumbertypeString.c_str(), "Fibonacci") == 0){
+                data.numberType = Number_Type_Fibonacci;
+            }else{
+                data.numberType = 0;
+                throw std::runtime_error("Error: Failed to parse input JSON. Invalid \"numberType\" field.");
+            }
+            std::cout << "parse input NumberType: " << std::bitset<8>(data.numberType) << std::endl;
+
         }
         else
         {
@@ -122,7 +142,7 @@ inputData_t inputOutput::parseInput(std::string input)
 #endif
         }
     }
-    std::cout << "parsed input" << std::endl;
+    //std::cout << "parsed input" << std::endl;
     cJSON_Delete(root);
     inputData_t output;
     output.errorType = io_NoError;
