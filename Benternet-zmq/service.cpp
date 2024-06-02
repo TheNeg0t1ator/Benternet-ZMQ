@@ -12,22 +12,43 @@
 #endif
 
 inputOutput io_class;
-
+std::string fibboFile = "../numbers/fibonacci_sequence.txt";
+std::string primeFile = "../numbers/primes.txt";
 
 int main( void )
 {
-    std::vector<int> primes;
-    FileClass file;
-    if (file.openFile())
+    std::vector<std::string> primes;
+    std::vector<std::string> fibbo;
+    FileClass fileprime;
+    FileClass filefibbo;
+    
+    if (fileprime.openFile(primeFile))
     {
-        file.readFile();
-        primes = file.outputprimes();
-        file.closeFile();
+        fileprime.readFile();
+        primes = fileprime.outputNumbers();
+        fileprime.closeFile();
+    }
+    else
+    {   
+        fileprime.closeFile();
+        std::cout << "File not found: "<< primeFile << std::endl;
+
+    }
+
+    if (filefibbo.openFile(fibboFile))
+    {
+        filefibbo.readFile();
+        fibbo = filefibbo.outputNumbers();
+        filefibbo.closeFile();
     }
     else
     {
-        std::cout << "File not found." << std::endl;
+        filefibbo.closeFile();
+        std::cout << "File not found: "<< fibboFile << std::endl;
+        
     }
+
+
     std::cout << "Starting service..." << std::endl;
     try
     {
@@ -45,13 +66,13 @@ int main( void )
 
         while( service.connected() )
         {
-            std::cout << "while ";
+            //std::cout << "while ";
             messageReceived = service.receive(1000); // Receive a message
             sleep(100);
 
             if (messageReceived.find("kobe?") != std::string::npos)
             {
-                std::cout << "Received message: " << messageReceived << std::endl;
+                //std::cout << "Received message: " << messageReceived << std::endl;
                 
                 //io_class.cleardata();
                 io_class.inputJSON(messageReceived);
@@ -60,15 +81,39 @@ int main( void )
                     std::cout << "Error in input data, error : " << std::bitset<8>(io_class.getInput().errorType) << std::endl;
                     continue;
                 }else{
-                std::cout << "Data received: " << std::endl;
-                io_class.printData();
+                //std::cout << "Data received: " << std::endl;
+                //io_class.printData();
     
                 inputData_t data = io_class.getInput();
                 outputData_t output_struct;
+                //std::cout << "Request type: " << std::bitset<8>(data.data.RequestType) << std::endl;
+                if(data.data.RequestType == Request_number)
+                {
+                    //std::cout << "Request number: "<< data.data.Prompt  << std::endl;
+                    uint64_t number = std::stoull(data.data.Prompt, nullptr, 10);
+                    
+                    std::cout << "Numbertype: " << std::bitset<8>(data.data.numberType) << std::endl;
+                    switch (data.data.numberType)
+                    {
+                    case Number_Type_Prime:
+                        output_struct.output = primes[number-1];
+                        std::cout << "Prime number: " << output_struct.output << std::endl;
+                        break;
+                    case Number_Type_Fibonacci:
+                        output_struct.output = fibbo[number-1];
+                        std::cout << "Fibonacci number: " << output_struct.output << std::endl;
+                        break;
+
+                    default:
+                        break;
+                    }
+                }
+
+
                 output_struct.data = data.data;
                 output_struct.errorType = 0;
                 output_struct.number = 0;
-                output_struct.output = "I am here";
+                //output_struct.output = "I am here";
                 std::string output = io_class.getOutput(output_struct);
                 
                 

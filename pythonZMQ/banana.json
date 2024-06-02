@@ -1,6 +1,6 @@
 {
     "RequestType": "Number",
-    "NumberType": "Prime",
+    "NumberType": "Fibonacci",
     "CheckNumber": "false",
-    "Prompt": "5"
+    "Prompt": "5618"
 }
