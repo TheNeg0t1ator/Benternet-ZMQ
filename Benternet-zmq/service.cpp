@@ -86,6 +86,7 @@ int main( void )
     
                 inputData_t data = io_class.getInput();
                 outputData_t output_struct;
+                output_struct.errorType = 0;
                 //std::cout << "Request type: " << std::bitset<8>(data.data.RequestType) << std::endl;
                 if(data.data.RequestType == Request_number)
                 {
@@ -96,11 +97,22 @@ int main( void )
                     switch (data.data.numberType)
                     {
                     case Number_Type_Prime:
-                        output_struct.output = primes[number-1];
-                        std::cout << "Prime number: " << output_struct.output << std::endl;
+                        if (number > 0 && number <= primes.size()) {
+                            output_struct.output = primes[number-1];
+                            std::cout << "Prime number: " << output_struct.output << std::endl;
+                        } else {
+                            std::cout << "Invalid prime number index" << std::endl;
+                            output_struct.errorType = io_outputError;
+                        }
                         break;
                     case Number_Type_Fibonacci:
-                        output_struct.output = fibbo[number-1];
+                        if (number > 0 && number <= fibbo.size()) {
+                            output_struct.output = fibbo[number-1];
+                            std::cout << "Fibonacci number: " << output_struct.output << std::endl;
+                        } else {
+                            std::cout << "Invalid Fibonacci number index" << std::endl;
+                            output_struct.errorType = io_outputError;
+                        }
                         std::cout << "Fibonacci number: " << output_struct.output << std::endl;
                         break;
 
@@ -108,10 +120,11 @@ int main( void )
                         break;
                     }
                 }
-
-
                 output_struct.data = data.data;
-                output_struct.errorType = 0;
+                
+                
+                 
+                
                 output_struct.number = 0;
                 //output_struct.output = "I am here";
                 std::string output = io_class.getOutput(output_struct);
