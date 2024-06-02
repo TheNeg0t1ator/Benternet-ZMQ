@@ -1,7 +1,7 @@
 import customtkinter as ctk
 import zmqServiceClass as zsc
 import threading
-
+import jsontest as jt
 class NumberData:
     prompt:str
     numberType:str
@@ -19,6 +19,7 @@ def receive_response():
         if response is not None:
             box.configure(state="normal")
             box.delete("1.0", "end")
+            response = jt.JsonParse(response)            
             box.insert("end", response)
             box.configure(state="disabled")
 
@@ -79,6 +80,14 @@ button.pack(pady=10, padx=10)
 
 box = ctk.CTkTextbox(master=frame, width=300, height=150, state="disabled")
 box.pack(pady=10, padx=10)
+
+def copy_text():
+    root.clipboard_clear()
+    root.clipboard_append(box.get("1.0", "end"))
+
+copy_button = ctk.CTkButton(master=frame, text="Copy Text", command=copy_text, width=300)
+copy_button.pack(pady=10, padx=10)
+
 
 root.mainloop()
 
