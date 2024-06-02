@@ -15,18 +15,19 @@ with open("banana.json", "r") as file:
 messagetosend = "kobe?" + messagetosend
 print("receiving messages")
 
-while True:
-    print("Sending:", messagetosend)
-    
-    messenger.send_message(messagetosend)
-    print("Message sent")
-    print("Waiting for message")
-    message = messenger.receive_message(timeout=500)
-    print("Message received:", message)
-    if message is not None:
-        print("Received:", message)
-        with open("data.json", "w") as file:
-            json.dump(message, file)
+#while True:
+print("Sending:", messagetosend)
+
+messenger.send_message(messagetosend)
+print("Message sent")
+print("Waiting for message")
+message = messenger.receive_message(timeout=1500)
+#print("Message received:", message)
+if message is not None:
+    print("Received:", message)
+    message = message[6:]
+    with open("data.json", "w") as file:
+        file.write(message)
     
         
     

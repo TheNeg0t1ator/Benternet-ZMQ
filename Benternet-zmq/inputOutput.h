@@ -69,7 +69,7 @@ private:
     void printResolution(resolution_t data);
     void printPrompt(PrompData_t data);
     std::string stripToJson(const std::string& input);
-    
+    std::string requestTypeToString(uint8_t requestType);
 };
 
 #endif // INPUTOUTPUT_H
