@@ -2,15 +2,19 @@
 #include "cJSON.h"
 #include <iostream>
 
+//#define Use_RuntimeError
+
 inputOutput::inputOutput() {}
 
 void inputOutput::inputJSON(std::string input)
 {
-    std::cout << "entered inputJSON" << std::endl;
-    inputData = input;
-    std::cout << "Input: " << input << std::endl;
+    //std::cout << "entered inputJSON" << std::endl;
+    
+    inputData = stripToJson(input);
+    //std::cout << "Stripped to json" << std::endl;
+    //std::cout << "Input: " << input << std::endl;
     data = parseInput(input);
-    std::cout << "Data parsed" << std::endl;
+    //std::cout << "Data parsed" << std::endl;
 }
 
 inputData_t inputOutput::getInput(void)
@@ -41,33 +45,64 @@ inputData_t inputOutput::parseInput(std::string input){
     if (prompt != nullptr) {
         data.Prompt = prompt->valuestring;
     } else {
+#ifdef Use_RuntimeError
         throw std::runtime_error("Error: Failed to parse input JSON. Missing \"Prompt\" field.");
+#else
+        inputData_t ErrorData;
+        ErrorData.data = data;
+        ErrorData.errorType = io_promptError;
+        return ErrorData;
+#endif
     }
 
     if (resolution != nullptr) {
         resolution_str = resolution->valuestring;
     } else {
+#ifdef Use_RuntimeError
         throw std::runtime_error("Error: Failed to parse input JSON. Missing \"resolution\" field.");
+#else
+        inputData_t ErrorData;
+        ErrorData.data = data;
+        ErrorData.errorType = io_resolutionError;
+        return ErrorData;
+#endif
     }
 
-    sscanf(resolution_str.c_str(), "%dx%d", &data.resolution.x, &data.resolution.y);
+    sscanf(resolution_str.c_str(), "%hdx%hd", &data.resolution.x, &data.resolution.y);
 
 
     if (RequestType != nullptr) {
         data.RequestType = RequestType->valueint;
     } else {
+#ifdef Use_RuntimeError
         throw std::runtime_error("Error: Failed to parse input JSON. Missing \"RequestType\" field.");
+#else
+        inputData_t ErrorData;
+        ErrorData.data = data;
+        ErrorData.errorType = io_requestTypeError;
+        return ErrorData;
+#endif
     }
 
     if (numberType != nullptr) {
         data.numberType = numberType->valueint;
     } else {
         data.numberType = 0;
-        //throw std::runtime_error("Error: Failed to parse input JSON. Missing \"numberType\" field.");
+        
+#ifdef Use_RuntimeError
+        throw std::runtime_error("Error: Failed to parse input JSON. Missing \"numberType\" field.");
+#else
+        inputData_t ErrorData;
+        ErrorData.data = data;
+        ErrorData.errorType = io_numberTypeError;
+        return ErrorData;
+#endif
     }
+
     std::cout << "parsed input" << std::endl;
     cJSON_Delete(root);
     inputData_t output;
+    output.errorType = io_NoError;
     output.data = data;
     return output;
 }
@@ -131,4 +166,28 @@ void inputOutput::printData(void){
     std::cout << "InputData: " << inputData << std::endl;
     printoutData(output_struct);
     std::cout << "OutputData: " << outputData << std::endl;
+}
+
+
+
+
+std::string inputOutput::stripToJson(const std::string& input) {
+    // Find the first occurrence of '{'
+    size_t start = input.find('{');
+    if (start == std::string::npos) {
+        // If there's no '{', return an empty string (no JSON found)
+        return "";
+    }
+
+    // Find the last occurrence of '}'
+    size_t end = input.rfind('}');
+    if (end == std::string::npos) {
+        // If there's no '}', return an empty string (no JSON found)
+        return "";
+    }
+
+    // Extract the JSON substring
+    std::string jsonStr = input.substr(start, end - start + 1);
+    //std::cout << "Stripped JSON: " << jsonStr << std::endl;
+    return jsonStr;
 }

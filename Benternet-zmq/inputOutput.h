@@ -9,6 +9,15 @@
 #define Number_Type_Simple 2
 #define Number_Type_Fibonacci 3
 
+#define io_NoError 0
+#define io_parseError 1
+#define io_promptError 2
+#define io_resolutionError 3
+#define io_requestTypeError 4
+#define io_numberTypeError 5
+#define io_numberError 6
+#define io_outputError 7
+
 
 
 
@@ -27,6 +36,7 @@ typedef struct{
 
 typedef struct{
     PrompData_t data;
+    uint8_t errorType;
 }inputData_t;
 
 typedef struct{
@@ -58,6 +68,7 @@ private:
     void printoutData(outputData_t data);
     void printResolution(resolution_t data);
     void printPrompt(PrompData_t data);
+    std::string stripToJson(const std::string& input);
     
 };
 

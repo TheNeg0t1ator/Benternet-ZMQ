@@ -1,7 +1,6 @@
 {
-    "RequestType": "Image",
-    "ImageType": "Generate",
-    "Prompt": "A penguin in a suit",
-    "Resolution": "512x512",
-    "Spellcheck": "True"
+    "RequestType": "Number",
+    "NumberType": "Prime",
+    "CheckNumber": "false",
+    "Prompt": "5"
 }
