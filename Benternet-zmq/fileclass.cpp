@@ -17,7 +17,9 @@ bool FileClass::openFile(std::string filename){
 
 void FileClass::closeFile(){
     if (file) {
+        
         fclose(file);
+        
         file = nullptr;
     }
 }
@@ -27,7 +29,7 @@ bool FileClass::readFile(){
         return false;
     }
     std::string line;
-    std::ifstream inputFile(filename); // Use the filename directly
+    std::ifstream inputFile(filename); // Use the filename directly i
     if (!inputFile.is_open()) {
         perror("Error opening file");
         return false;
@@ -41,3 +43,4 @@ bool FileClass::readFile(){
 std::vector<std::string> FileClass::outputNumbers(){
     return Numberlist;
 }
+

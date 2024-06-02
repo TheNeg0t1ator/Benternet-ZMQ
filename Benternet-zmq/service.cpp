@@ -19,31 +19,35 @@ int main( void )
 {
     std::vector<std::string> primes;
     std::vector<std::string> fibbo;
-    FileClass file;
+    FileClass fileprime;
+    FileClass filefibbo;
     
-    if (file.openFile(primeFile))
+    if (fileprime.openFile(primeFile))
     {
-        file.readFile();
-        primes = file.outputNumbers();
-        file.closeFile();
+        fileprime.readFile();
+        primes = fileprime.outputNumbers();
+        fileprime.closeFile();
     }
     else
-    {
+    {   
+        fileprime.closeFile();
         std::cout << "File not found: "<< primeFile << std::endl;
 
     }
 
-    if (file.openFile(fibboFile))
+    if (filefibbo.openFile(fibboFile))
     {
-        file.readFile();
-        fibbo = file.outputNumbers();
-        file.closeFile();
+        filefibbo.readFile();
+        fibbo = filefibbo.outputNumbers();
+        filefibbo.closeFile();
     }
     else
     {
+        filefibbo.closeFile();
         std::cout << "File not found: "<< fibboFile << std::endl;
         
     }
+
 
     std::cout << "Starting service..." << std::endl;
     try
@@ -78,7 +82,7 @@ int main( void )
                     continue;
                 }else{
                 //std::cout << "Data received: " << std::endl;
-                io_class.printData();
+                //io_class.printData();
     
                 inputData_t data = io_class.getInput();
                 outputData_t output_struct;
@@ -88,14 +92,16 @@ int main( void )
                     //std::cout << "Request number: "<< data.data.Prompt  << std::endl;
                     uint64_t number = std::stoull(data.data.Prompt, nullptr, 10);
                     
-                    //std::cout << "Numbertype: " << std::bitset<8>(data.data.numberType) << std::endl;
+                    std::cout << "Numbertype: " << std::bitset<8>(data.data.numberType) << std::endl;
                     switch (data.data.numberType)
                     {
                     case Number_Type_Prime:
                         output_struct.output = primes[number-1];
+                        std::cout << "Prime number: " << output_struct.output << std::endl;
                         break;
                     case Number_Type_Fibonacci:
                         output_struct.output = fibbo[number-1];
+                        std::cout << "Fibonacci number: " << output_struct.output << std::endl;
                         break;
 
                     default:
