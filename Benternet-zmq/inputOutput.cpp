@@ -28,7 +28,7 @@ void cleardata(void)
 {
     inputData_t data = {};
     std::string inputData = "";
-    outputData_t output_struct = {};
+    outputData_t output_struct = {}; // Remove this line
     std::string outputData = "";
 }
 
@@ -178,14 +178,14 @@ std::string inputOutput::parseOutput(outputData_t input)
         cJSON_AddItemToObject(root, "number", number);
         cJSON_AddItemToObject(root, "numberType", numberType);
     }else if(input.data.RequestType == Request_Card){
-        // std::string suitString = input.card.outputsuitString();
-        // int valueInt = input.card.getValue();
-        // cJSON *card = cJSON_CreateObject();
-        // cJSON *suit = cJSON_CreateString(suitString.c_str());
-        // cJSON *rank = cJSON_CreateNumber(valueInt);
-        // cJSON_AddItemToObject(card, "suit", suit);
-        // cJSON_AddItemToObject(card, "rank", rank);
-        // cJSON_AddItemToObject(root, "card", card);
+        std::string suitString = input.card->outputsuitString();
+        int valueInt = input.card->getValue();
+        cJSON *card = cJSON_CreateObject();
+        cJSON *suit = cJSON_CreateString(suitString.c_str());
+        cJSON *rank = cJSON_CreateNumber(valueInt);
+        cJSON_AddItemToObject(card, "suit", suit);
+        cJSON_AddItemToObject(card, "rank", rank);
+        cJSON_AddItemToObject(root, "card", card);
     }
 
     char *output_string = cJSON_Print(root);

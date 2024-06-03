@@ -1,6 +1,10 @@
 {
 	"Prompt":	"Random",
 	"RequestType":	"",
-	"output":	"Spades 6",
-	"errorType":	0
+	"output":	"Diamonds 7",
+	"errorType":	0,
+	"card":	{
+		"suit":	"Diamonds",
+		"rank":	7
+	}
 }

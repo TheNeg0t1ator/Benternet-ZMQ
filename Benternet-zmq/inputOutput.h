@@ -47,7 +47,7 @@ typedef struct{
     uint64_t number;
     std::string output;
     uint8_t errorType;
-    // CardClass card;
+    CardClass * card;
 
 }outputData_t;
 

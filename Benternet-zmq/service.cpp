@@ -123,8 +123,8 @@ int main( void )
                     }
                 }else if (data.data.RequestType == Request_Card)
                 {
-                    CardClass card(time(nullptr));
-                    output_struct.output = card.outputCardString();
+                    output_struct.card = new CardClass(time(nullptr));
+                    output_struct.output = output_struct.card->outputCardString();
                 }
                 
                 output_struct.data = data.data;
