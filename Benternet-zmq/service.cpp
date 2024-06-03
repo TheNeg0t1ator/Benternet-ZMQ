@@ -124,7 +124,7 @@ int main( void )
                 }else if (data.data.RequestType == Request_Card)
                 {
                     CardClass card(time(nullptr));
-                    output_struct.number = card.getValue();
+                    output_struct.output = card.outputCardString();
                 }
                 
                 output_struct.data = data.data;
