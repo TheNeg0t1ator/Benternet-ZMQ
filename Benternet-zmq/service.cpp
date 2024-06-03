@@ -4,6 +4,7 @@
 #include "zmq_service.h"
 #include "fileclass.h"
 #include "inputOutput.h"
+#include "cardclass.hpp"
 #ifndef _WIN32
 #include <unistd.h>
 #else
@@ -47,7 +48,8 @@ int main( void )
         std::cout << "File not found: "<< fibboFile << std::endl;
         
     }
-
+    std::cout << "Fibonacci number 500 " << fibbo[499] << std::endl;
+    std::cout << "Prime number 500 " << primes[499] << std::endl;
 
     std::cout << "Starting service..." << std::endl;
     try
@@ -97,8 +99,8 @@ int main( void )
                     switch (data.data.numberType)
                     {
                     case Number_Type_Prime:
-                        if (number > 0 && number <= primes.size()) {
-                            output_struct.output = primes[number-1];
+                        if (number <= primes.size()-1) {
+                            output_struct.output = primes[number];
                             std::cout << "Prime number: " << output_struct.output << std::endl;
                         } else {
                             std::cout << "Invalid prime number index" << std::endl;
@@ -106,8 +108,8 @@ int main( void )
                         }
                         break;
                     case Number_Type_Fibonacci:
-                        if (number > 0 && number <= fibbo.size()) {
-                            output_struct.output = fibbo[number-1];
+                        if (number <= fibbo.size()-1) {
+                            output_struct.output = fibbo[number];
                             std::cout << "Fibonacci number: " << output_struct.output << std::endl;
                         } else {
                             std::cout << "Invalid Fibonacci number index" << std::endl;
@@ -119,7 +121,12 @@ int main( void )
                     default:
                         break;
                     }
+                }else if (data.data.RequestType == Request_Card)
+                {
+                    CardClass card(time(nullptr));
+                    output_struct.number = card.getValue();
                 }
+                
                 output_struct.data = data.data;
                 
                 

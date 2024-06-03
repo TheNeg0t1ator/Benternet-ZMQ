@@ -70,9 +70,8 @@ inputData_t inputOutput::parseInput(std::string input)
         else if (strcmp(requeststring.c_str(), "Number") == 0)
         {
             data.RequestType = Request_number;
-
-            
-
+        }else if (strcmp(requeststring.c_str(), "Card") == 0){
+            data.RequestType = Request_Card;
         }else{
             data.RequestType = 0;
             throw std::runtime_error("Error: Failed to parse input JSON. Invalid \"RequestType\" field.");
@@ -178,6 +177,15 @@ std::string inputOutput::parseOutput(outputData_t input)
         cJSON *numberType = cJSON_CreateNumber(input.data.numberType);
         cJSON_AddItemToObject(root, "number", number);
         cJSON_AddItemToObject(root, "numberType", numberType);
+    }else if(input.data.RequestType == Request_Card){
+        // std::string suitString = input.card.outputsuitString();
+        // int valueInt = input.card.getValue();
+        // cJSON *card = cJSON_CreateObject();
+        // cJSON *suit = cJSON_CreateString(suitString.c_str());
+        // cJSON *rank = cJSON_CreateNumber(valueInt);
+        // cJSON_AddItemToObject(card, "suit", suit);
+        // cJSON_AddItemToObject(card, "rank", rank);
+        // cJSON_AddItemToObject(root, "card", card);
     }
 
     char *output_string = cJSON_Print(root);
