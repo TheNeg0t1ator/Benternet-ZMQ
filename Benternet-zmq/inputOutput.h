@@ -1,10 +1,13 @@
 #include <string>
+#include "cardclass.hpp"
 
 #ifndef INPUTOUTPUT_H
 #define INPUTOUTPUT_H
 
 #define Request_image 1
 #define Request_number 2
+#define Request_Card 3  
+
 #define Number_Type_Prime 1
 #define Number_Type_Simple 2
 #define Number_Type_Fibonacci 3
@@ -44,6 +47,8 @@ typedef struct{
     uint64_t number;
     std::string output;
     uint8_t errorType;
+    CardClass * card;
+
 }outputData_t;
 
 class  inputOutput

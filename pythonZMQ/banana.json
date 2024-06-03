@@ -1,6 +1,6 @@
 {
-    "RequestType": "Number",
-    "NumberType": "Fibonacci",
+    "RequestType": "Card",
+    "NumberType": "blah",
     "CheckNumber": "false",
-    "Prompt": "5618"
+    "Prompt": "Random"
 }

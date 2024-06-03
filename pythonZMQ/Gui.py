@@ -44,6 +44,7 @@ data:NumberData = NumberData()
 
 def send_prompt():
     data.prompt = entry.get()
+    data.prompt = int(data.prompt)-1
     data.numberType = dropdown.get()
     print(data)
     messenger.send_message("kobe?"+str(data))

@@ -21,7 +21,7 @@ print("Sending:", messagetosend)
 messenger.send_message(messagetosend)
 print("Message sent")
 print("Waiting for message")
-message = messenger.receive_message(timeout=1500)
+message = messenger.receive_message(timeout=2000)
 #print("Message received:", message)
 if message is not None:
     print("Received:", message)
