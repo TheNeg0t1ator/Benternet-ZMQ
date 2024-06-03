@@ -186,6 +186,7 @@ std::string inputOutput::parseOutput(outputData_t input)
         cJSON_AddItemToObject(card, "suit", suit);
         cJSON_AddItemToObject(card, "rank", rank);
         cJSON_AddItemToObject(root, "card", card);
+
     }
 
     char *output_string = cJSON_Print(root);
@@ -264,6 +265,8 @@ std::string inputOutput::requestTypeToString(uint8_t requestType){
         return "Image";
     }else if(requestType == Request_number){
         return "Number";
+    }else if(requestType == Request_Card){
+        return "Card";
     }else{
         return "";
     }
